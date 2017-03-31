@@ -1,0 +1,31 @@
+.cards .card {
+            cursor: pointer;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul li {
+            list-style: none;
+        }
+
+        ul#after-table {
+            min-height: 500px;
+        }
+
+        ul#after-table li image {
+            float: none !important;
+        }
+
+        ul#after-table li {
+            float: left !important;
+            margin: 0 10px 10px 0;
+        }
+
+        ul#div1 li, ul#div2 li {
+            float: left !important;
+            margin: 0 10px 10px 0;
+        }
+
