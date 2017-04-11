@@ -37,7 +37,7 @@
 			
 			var log = new Object();
 			
-			log.type = "validation cards";
+			log.type = "validation";
 
 
 			log.trump = $('form#main select').val();
@@ -69,7 +69,7 @@
 		{
 			var log = new Object();
 			
-			log.type = "determine the winner";
+			log.type = "won";
 
 			log.trump = $('form#main select').val();
 	

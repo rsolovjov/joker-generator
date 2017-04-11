@@ -7,7 +7,7 @@
 1. Для валадации карт
 ```javascript
 {
-	"type": "validation cards",
+	"type": "validation",
 	"hand": [{
 		"colour": "0",
 		"option": "0",
@@ -51,7 +51,7 @@
 2. Для определения победителя:
 ```javascript
 {
-	"type": "determine the winner",
+	"type": "won",
 	"cards_on_table": [{
 		"colour": "0",
 		"option": "0",
