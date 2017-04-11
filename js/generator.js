@@ -246,6 +246,26 @@
             $(el).html(html_string);
         }
 		
+		plugin.suitToASCII = function(suit) {
+			return suitToASCII(suit);			
+        }
+		
+		var suitToASCII = function (suit) {
+			if (suit == 'C')
+				return '♣';
+			
+			if (suit == 'S')
+				return '♠';
+			
+			if (suit == 'D')
+				return '♦';
+			
+			if (suit == 'H')
+				return '♥';
+		
+			return suit;
+		}
+		
 		plugin.parseCards = function($el) {
 			return parseCards($el);			
         }
@@ -259,9 +279,11 @@
 				var $firstImg = $this.find('img');
 
                 var suit = $firstImg.data('p0');
+				var suit_ascii = suitToASCII(suit);
                 var rank = $firstImg.data('p1');
 				var option = 0;
 				var option_suit = 0;
+				var option_suit_ascii = 0;
 				var colour = 0;
 				
 				if (suit == 'J')
@@ -272,6 +294,8 @@
 					var elementOptionSuit = $this.find('.drop-option_suit');
 					option_suit = elementOptionSuit.val();
 					
+					option_suit_ascii = suitToASCII(option_suit);
+					
 					var elementColour = $this.find('.drop-colour');
 					colour = elementColour.val();					
 				}
@@ -279,9 +303,11 @@
 				var card = {
 					"rank": rank,
 					"suit": suit,
+					"suit_ascii": suit_ascii,
 					"colour": colour,
 					"option": option,
 					"option_suit": option_suit,
+					"option_suit_ascii": option_suit_ascii,
 					"status": index + 1,
 				}
 				

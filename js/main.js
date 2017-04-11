@@ -20,14 +20,17 @@
 			$('#table').data('generator').updateDeck();
 		});
 		
+		// Client validation
+		// ----------------------------------------------------------------------------------------------------------------------------
+		
 		$('#save_for_client_validation').on('click', function (e) {
-            //e.prevent
+			e.preventDefault();
 			preview_for_client_validation();
 			saveTextAsFile();
 		});
 		
 		$('#preview_for_client_validation').on('click', function (e) {
-            //e.preventDefault();
+            e.preventDefault();
 			preview_for_client_validation();		
 		});
 		
@@ -39,10 +42,8 @@
 			
 			log.type = "validation";
 
-
 			log.trump = $('form#main select').val();
 			
-			//---------------------------
 			log.cards_on_table = $('#table').data('generator').parseCards($('#onTable li'));
 			log.hand = $('#table').data('generator').parseCards($('#myCards li'));
 			
@@ -52,16 +53,17 @@
 			$('#results').text(JSON.stringify(log));
 		}
 		
-		//-------------------------
+		// Client won
+		// ----------------------------------------------------------------------------------------------------------------------------
 		
 		$('#save_for_client_won').on('click', function (e) {
-            //e.prevent
+			e.preventDefault();
 			preview_for_client_won();
 			saveTextAsFile();
 		});
 		
 		$('#preview_for_client_won').on('click', function (e) {
-            //e.preventDefault();
+			e.preventDefault();
 			preview_for_client_won();		
 		});
 		
@@ -81,12 +83,61 @@
 			$('#results').text(JSON.stringify(log));
 		}
 		
-		function destroyClickedElement(event)
+		// Server won
+		// -------------------------------------------------------------------------------------------------------------------
+		
+		$('#save_for_server_won').on('click', function (e) {
+            e.preventDefault();
+			preview_for_server_won();
+			saveTextAsFile();
+		});
+		
+		$('#preview_for_server_won').on('click', function (e) {
+			e.preventDefault();
+			preview_for_server_won();		
+		});
+		
+		preview_for_server_won = function()
 		{
-			document.body.removeChild(event.target);
+			var cards_on_table = $('#table').data('generator').parseCards($('#onTable li'));
+			var first_player = 1;
+			var winner = $('#inputWon').val();
+			var trump = $('form#main select').val();
+			trump = $('#table').data('generator').suitToASCII(trump);
+			
+			var tmpl = _.template(document.getElementById('server-won-template').innerHTML);
+			var res = tmpl({cards_on_table: cards_on_table, first_player: first_player, trump: trump, winner: winner});
+			$('#results').text( res.replace(/\n+/g,'\n') );
 		}
 		
-		// ---------------
+		$('#save_for_server_validation').on('click', function (e) {
+			e.preventDefault();
+			preview_for_server_validation();
+			saveTextAsFile();
+		});
+		
+		$('#preview_for_server_validation').on('click', function (e) {
+			e.preventDefault();
+			preview_for_server_validation();		
+		});
+		
+		preview_for_server_validation = function()
+		{
+			var cards_on_table = $('#table').data('generator').parseCards($('#onTable li'));
+			var hand = $('#table').data('generator').parseCards($('#myCards li'));
+			var valid_cards = $('#table').data('generator').parseCards($('#validCards li'));
+			
+			var position = cards_on_table.length + 1;
+			var trump = $('form#main select').val();
+			trump = $('#table').data('generator').suitToASCII(trump);
+
+			var tmpl = _.template(document.getElementById('server-validation-template').innerHTML);
+			var res = tmpl({cards_on_table: cards_on_table, position: position, trump: trump, hand: hand, valid_cards: valid_cards});
+			$('#results').text( res.replace(/\n+/g,'\n') );
+		}
+		
+		// Save
+		// -------------------------------------------------------------------------------------------------------------------
 		
 		saveTextAsFile = function ()
 		{
@@ -119,6 +170,10 @@
 			downloadLink.click();
 		}
 		
+		function destroyClickedElement(event)
+		{
+			document.body.removeChild(event.target);
+		}
     });
 })(jQuery);
 
