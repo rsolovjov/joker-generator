@@ -55,16 +55,16 @@ table = Array.new
 <%var counter=1;%> <%for(var card in cards_on_table) {%>
 	<%if (cards_on_table[card].suit_ascii == "J"){%>
 		<%if (cards_on_table[card].option > 1) {%>
-			table.push(get_table_card(<%=counter++%>, '<%= cards_on_table[card].rank %>', '<%= cards_on_table[card].suit_ascii %>', '<%= cards_on_table[card].option %>', '<%= cards_on_table[card].option_suit_ascii %>')),
+			table.push(get_table_card(<%=counter++%>, '<%= cards_on_table[card].rank %>', '<%= cards_on_table[card].suit_ascii %>', '<%= cards_on_table[card].option %>', '<%= cards_on_table[card].option_suit_ascii %>'))
 		<%} else {%>
-			table.push(get_table_card(<%=counter++%>, '<%= cards_on_table[card].rank %>', '<%= cards_on_table[card].suit_ascii %>', '<%= cards_on_table[card].option %>')),
+			table.push(get_table_card(<%=counter++%>, '<%= cards_on_table[card].rank %>', '<%= cards_on_table[card].suit_ascii %>', '<%= cards_on_table[card].option %>'))
 		<% } %>
 	<% } else { %> table.push(get_table_card(<%=counter++%>, '<%= cards_on_table[card].rank %>', '<%= cards_on_table[card].suit_ascii %>')),<% } %>
 <% } %>
 
 cards = Array.new
 <%for(var card in hand) {%>
-	cards.push(get_card(position, '<%= hand[card].rank %>', '<%= hand[card].suit_ascii %>')),
+	cards.push(get_card(position, '<%= hand[card].rank %>', '<%= hand[card].suit_ascii %>'))
 <% } %>
 
 at = get_available_trick(position, cards, table, firstplayer, trump)
@@ -92,6 +92,7 @@ expect(trick[:rank]).to eq('<%= valid_cards[0].rank %>')
                         <option value="H">♥</option>
                         <option value="C">♣</option>
                         <option value="S">♠</option>
+						<option value="J">J</option>
                         </select>
                 </div>
                 <div class="form-group">
