@@ -13,7 +13,6 @@
 		"option": "0",
 		"option_suit": "0",
 		"rank": "J",
-		"status": "1",
 		"suit": "H"
 	},
 	{
@@ -21,7 +20,6 @@
 		"option": "0",
 		"option_suit": "0",
 		"rank": "A",
-		"status": "1",
 		"suit": "C"
 	}],
 	"cards_on_table": [{
@@ -29,7 +27,6 @@
 		"option": "0",
 		"option_suit": "0",
 		"rank": "9",
-		"status": "7",
 		"suit": "H"
 	},
 	{
@@ -37,24 +34,15 @@
 		"option": "0",
 		"option_suit": "0",
 		"rank": "Q",
-		"status": "8",
 		"suit": "D"
 	}],
-	"trump": {
-		"colour": "0",
-		"option": "0",
-		"option_suit": "0",
-		"rank": "J",
-		"status": "13",
-		"suit": "H"
-	},
+	"trump": "H",
 	"answer": {
 		"valid_cards": [{
 			"colour": "0",
 			"option": "0",
 			"option_suit": "0",
 			"rank": "J",
-			"status": "1",
 			"suit": "H"
 		}]
 	}
@@ -69,7 +57,6 @@
 		"option": "0",
 		"option_suit": "0",
 		"rank": "9",
-		"status": "7",
 		"suit": "H"
 	},
 	{
@@ -77,7 +64,6 @@
 		"option": "0",
 		"option_suit": "0",
 		"rank": "Q",
-		"status": "8",
 		"suit": "D"
 	},
 	{
@@ -85,7 +71,6 @@
 		"option": "0",
 		"option_suit": "0",
 		"rank": "10",
-		"status": "8",
 		"suit": "H"
 	},
 	{
@@ -93,17 +78,9 @@
 		"option": "0",
 		"option_suit": "0",
 		"rank": "6",
-		"status": "8",
 		"suit": "C"
 	}],
-	"trump": {
-		"colour": "0",
-		"option": "0",
-		"option_suit": "0",
-		"rank": "J",
-		"status": "13",
-		"suit": "H"
-	},
+	"trump":"H",
 	"answer": {
 		"won": 4
 	}

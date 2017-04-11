@@ -32,7 +32,6 @@
             // plugin, so that users may customize those particular events without
             // changing the plugin's code
             onFoo: function() {}
-
         }
 
         // to avoid confusions, use "plugin" to reference the
@@ -67,185 +66,147 @@
                     all_cards.push(k + '-' + value);
                 });
             });
-            //all_cards.push('Joker-Black');
+            
+			all_cards.push('J-15');
+			all_cards.push('J-15');
             //all_cards.push('Joker-Red');
-            //console.log(all_cards);
+            console.log('generator init; all_cards: ' + all_cards);
 
+			plugin.updateDeck();
+			
+			//plugin.updateAll();
         }
+		
+		plugin.updateAll = function() {			
+			var $trash = $( "#onTable" );
+			var	$trash2 = $( "#myCards" );
+			var	$trash3 = $( "#validCards" );
+			
+			$trash.empty();
+			$trash2.empty();
+			$trash3.empty();
+			
+			$trash.append('<a>Карты на столе</a>');
+			$trash2.append('<a>Карты в руке</a>');
+			$trash3.append('<a>Валидные карты</a>');
+			
+			plugin.updateDeck();
+		}
+		
+        plugin.updateDeck = function() {
+            
+			$('.table, .cards').css('min-height', '100px');
+			$('.table, .cards').css('border', '1px dashed #ccc');
+			printCards('#after-table', all_cards, {card_wrapper: 'li', card_height: 70});
 
-        plugin.generate = function(params) {
-            var default_params = {
-                firstplayer: 1,
-                position: 3,
-                trump: 'D',
-                phase: 7,
-                order: 0,
-                won: 0,
-                total_order: 1,
-                auto: 0
-            }
-            var settings = $.extend({}, default_params, params);
+			// there's the gallery and the trash
+			var $gallery = $( "#after-table" );
 
-            var string = '';
+			// let the gallery items be draggable
+			$( "li", $gallery ).draggable({
+				cancel: "a.ui-icon", // clicking an icon won't initiate dragging
+				revert: "invalid", // when not dropped, the item will revert back to its initial position
+				containment: "document",
+				helper: "clone",
+				cursor: "move"
+			});
 
-            $.each(settings, function( key, value ) {
-                if (key !== 'auto') {
-                    if (key === 'trump') {
-                        string += key + ' = \'' + suit[value] + "\'\r\n";
-                    }
-                    else {
-                        string += key + ' = ' + value + "\r\n";
-                    }
-                }
-            });
+			// let the trash be droppable, accepting the gallery items
+			$('#onTable, #myCards, #validCards').droppable({
+				accept: "#after-table > li",
+				activeClass: "ui-state-highlight",
+				drop: function( event, ui ) {
+					deleteImage( ui.draggable, $(this) );
+				}
+			});
 
-            if (settings.auto === 1) {
-                var table = getRandomSubarray(all_cards, settings.position - 1);
+			// let the gallery be droppable as well, accepting items from the trash
+			$gallery.droppable({
+				accept: "#table li",
+				activeClass: "custom-state-active",
+				drop: function( event, ui ) {
+					recycleImage( ui.draggable );
+				}
+			});
 
-                var not_all_cards = all_cards.filter( function ( elem ) {
-                    return table.indexOf( elem ) === -1;
-                });
+			// image deletion function
+			var recycle_icon = "";
+			function deleteImage( $item, $el ) {
+				console.log('deleteImage');
+				$item.fadeOut(function() {
+					var $list = $( "ul", $el ).length ?
+						$( "ul", $el ) :
+						$( "<ul class='gallery ui-helper-reset'/>" ).appendTo( $el );
 
-                var cards = getRandomSubarray(not_all_cards, settings.phase);
+					console.log('item.fadeOut list: ' + $list.length);
+						
+					$item.draggable( "destroy" );
+						
+					$item.find( "a.ui-icon-trash" ).remove();
+					$item.append( recycle_icon ).appendTo( $list ).fadeIn(function() {
+						$item
+							.find( "img" )
+							.animate({ height: "100px" });
+					});
+				});
+			}
 
-                printCards('.table', table);
-                printCards('.cards', cards);
+			// image recycle function
+			var trash_icon = "";
+			function recycleImage( $item ) {
+				$item.fadeOut(function() {
+					$item
+						.find( "a.ui-icon-refresh" )
+						.remove()
+						.end()
+						.append( trash_icon )
+						.find( "img" )
+						.css( "height", "70px" )
+						.end()
+						.appendTo( $gallery )
+						.fadeIn();
+				});
+			}
 
-                var table = convertArray(table);
-                var cards = convertArray(cards);
+			// image preview function, demonstrating the ui.dialog used as a modal window
+			function viewLargerImage( $link ) {
+				var src = $link.attr( "href" ),
+					title = $link.siblings( "img" ).attr( "alt" ),
+					$modal = $( "img[src$='" + src + "']" );
 
-                string += "\r\n";
-                string += arrayToStr('table', table);
-                string += "\r\n";
-                string += arrayToStr('cards', cards);
+				if ( $modal.length ) {
+					$modal.dialog( "open" );
+				} else {
+					var img = $( "<img alt='" + title + "' width='384' height='288' style='display: none; padding: 8px;' />" )
+						.attr( "src", src ).appendTo( "body" );
+					setTimeout(function() {
+						img.dialog({
+							title: title,
+							width: 400,
+							modal: true
+						});
+					}, 1 );
+				}
+			}
 
-                var text = $('#results').text();
-                $('#results').text(text + string);
-            }
-            else {
-                $('.table, .cards').css('min-height', '100px');
-                $('.table, .cards').css('border', '1px dashed #ccc');
-                printCards('#after-table', all_cards, {card_wrapper: 'li', card_height: 70});
+			// resolve the icons behavior with event delegation
+			$( "ul.gallery > li" ).click(function( event ) {
+				
+				console.log('click ul.gallery > li ?????');
+				
+				var $item = $( this ),
+					$target = $( event.target );
 
-                // there's the gallery and the trash
-                var $gallery = $( "#after-table" ),
-                    $trash = $( "#onTable"),
-                    $trash2 = $( "#myCards" );
+				if ( $target.is( "a.ui-icon-trash" ) ) {
+					deleteImage( $item );
+				} else if ( $target.is( "a.ui-icon-zoomin" ) ) {
+					viewLargerImage( $target );
+				} else if ( $target.is( "a.ui-icon-refresh" ) ) {
+					recycleImage( $item );
+				}
 
-                // let the gallery items be draggable
-                $( "li", $gallery ).draggable({
-                    cancel: "a.ui-icon", // clicking an icon won't initiate dragging
-                    revert: "invalid", // when not dropped, the item will revert back to its initial position
-                    containment: "document",
-                    helper: "clone",
-                    cursor: "move"
-                });
-
-                // let the trash be droppable, accepting the gallery items
-                $('#onTable, #myCards').droppable({
-                    accept: "#after-table > li",
-                    activeClass: "ui-state-highlight",
-                    drop: function( event, ui ) {
-                        deleteImage( ui.draggable, $(this) );
-                    }
-                });
-
-                // let the trash be droppable, accepting the gallery items
-                /*$trash2.droppable({
-                    accept: "#after-table > li",
-                    activeClass: "ui-state-highlight",
-                    drop: function( event, ui ) {
-                        deleteImage( ui.draggablee, $trash2 );
-                    }
-                });*/
-
-                // let the gallery be droppable as well, accepting items from the trash
-                $gallery.droppable({
-                    accept: "#table li",
-                    activeClass: "custom-state-active",
-                    drop: function( event, ui ) {
-                        recycleImage( ui.draggable );
-                    }
-                });
-
-                // image deletion function
-                var recycle_icon = "";
-                function deleteImage( $item, $el ) {
-                    $item.fadeOut(function() {
-                        var $list = $( "ul", $el ).length ?
-                            $( "ul", $el ) :
-                            $( "<ul class='gallery ui-helper-reset'/>" ).appendTo( $el );
-
-                        $item.find( "a.ui-icon-trash" ).remove();
-                        $item.append( recycle_icon ).appendTo( $list ).fadeIn(function() {
-                            $item
-                                .find( "img" )
-                                .animate({ height: "100px" });
-                        });
-                    });
-                }
-
-                // image recycle function
-                var trash_icon = "";
-                function recycleImage( $item ) {
-                    $item.fadeOut(function() {
-                        $item
-                            .find( "a.ui-icon-refresh" )
-                            .remove()
-                            .end()
-                            .append( trash_icon )
-                            .find( "img" )
-                            .css( "height", "70px" )
-                            .end()
-                            .appendTo( $gallery )
-                            .fadeIn();
-                    });
-                }
-
-                // image preview function, demonstrating the ui.dialog used as a modal window
-                function viewLargerImage( $link ) {
-                    var src = $link.attr( "href" ),
-                        title = $link.siblings( "img" ).attr( "alt" ),
-                        $modal = $( "img[src$='" + src + "']" );
-
-                    if ( $modal.length ) {
-                        $modal.dialog( "open" );
-                    } else {
-                        var img = $( "<img alt='" + title + "' width='384' height='288' style='display: none; padding: 8px;' />" )
-                            .attr( "src", src ).appendTo( "body" );
-                        setTimeout(function() {
-                            img.dialog({
-                                title: title,
-                                width: 400,
-                                modal: true
-                            });
-                        }, 1 );
-                    }
-                }
-
-                // resolve the icons behavior with event delegation
-                $( "ul.gallery > li" ).click(function( event ) {
-                    var $item = $( this ),
-                        $target = $( event.target );
-
-                    if ( $target.is( "a.ui-icon-trash" ) ) {
-                        deleteImage( $item );
-                    } else if ( $target.is( "a.ui-icon-zoomin" ) ) {
-                        viewLargerImage( $target );
-                    } else if ( $target.is( "a.ui-icon-refresh" ) ) {
-                        recycleImage( $item );
-                    }
-
-                    return false;
-                });
-
-                var text = $('#results').text();
-                $('#results').text(text + string);
-
-            }
-
-
-
+				return false;
+			});
         }
 
         var printCards = function(el, arr, opts) {
@@ -265,68 +226,71 @@
                     card_height = opts.card_height;
                 }
             }
-
-            /*if (card_draggable === true) {
-                draggable = ' draggable="true" ondragstart="drag(event)" ';
-            }*/
-
+			
             var html_string = '';
             $.each(arr, function( k, v ) {
                 var params = v.split('-');
-                html_string += card_prefix + '<img data-p0="' + params[0] + '" data-p1="' + params[1] + '" data-result="[\'' + params[1] + '\',\'' + suit[params[0]] + '\']" class="card" '+draggable+' src="images/cards/' + params[0] + params[1] + '.svg" ' +
-                    'style="float:left;max-width: 100%;height: '+card_height+'px;border:1px solid #ccc;margin: 0 10px 10px 0px;">' + card_suffix;
+				html_string += card_prefix;
+				html_string += '<img data-p0="' + params[0] + '" data-p1="' + params[1] + '" data-result="[\'' + params[1] + '\',\'' + suit[params[0]] + '\']" class="card" '+draggable+' src="images/cards/';
+				html_string += params[0] + params[1] + '.svg" ' + 'style="float:left;max-width: 100%;height: ' + card_height + 'px;border:1px solid #ccc;margin: 0 10px 10px 0px;">';				
+				
+				if (params[0] == 'J') 
+				{
+					html_string += '<select name="suit" placeholder="suit" class="drop-option_suit"> <option value="0">0</option> <option value="D">♦</option> <option value="H">♥</option><option value="C">♣</option><option value="S">♠</option></select>';
+					html_string += '<select name="suit" placeholder="suit" class="drop-option"> <option value="0">PLAY</option> <option value="1">PUT</option> <option value="2">MAX</option><option value="3">TAKE</option></select>';
+					html_string += '<select name="suit" placeholder="suit" class="drop-colour"> <option value="1">1</option> <option value="2">2</option></select>';						
+				}
+						
+				html_string += card_suffix;
             });
             $(el).html(html_string);
         }
-
-        var getRandomSubarray = function(arr, size) {
-            var shuffled = arr.slice(0), i = arr.length, temp, index;
-            while (i--) {
-                index = Math.floor((i + 1) * Math.random());
-                temp = shuffled[index];
-                shuffled[index] = shuffled[i];
-                shuffled[i] = temp;
-            }
-            return shuffled.slice(0, size);
+		
+		plugin.parseCards = function($el) {
+			return parseCards($el);			
         }
+		
+		var parseCards = function ($el) {
+			
+			var cardsJson = [];
+			
+			$el.each(function (index) {
+                var $this = $(this);	
+				var $firstImg = $this.find('img');
 
-        plugin.arrayToStr = function(label, arr) {
-            return arrayToStr(label, arr);
-        }
-
-        var arrayToStr = function (label, arr) {
-            var result = label + ' = [' + "\r\n";
-            $.each(arr, function( k, v ) {
-                result += '  [';
-                $.each(v, function( key, value ) {
-                    result += '\'' + value + '\'';
-                    if (key !== v.length - 1) {
-                        result += ', '
-                    }
-                });
-                result += ']';
-                if (k !== arr.length - 1) {
-                    result += ','
-                }
-                result += "\r\n";
+                var suit = $firstImg.data('p0');
+                var rank = $firstImg.data('p1');
+				var option = 0;
+				var option_suit = 0;
+				var colour = 0;
+				
+				if (suit == 'J')
+				{
+					var elementOption = $this.find('.drop-option');
+					option = elementOption.val();
+					
+					var elementOptionSuit = $this.find('.drop-option_suit');
+					option_suit = elementOptionSuit.val();
+					
+					var elementColour = $this.find('.drop-colour');
+					colour = elementColour.val();					
+				}
+			
+				var card = {
+					"rank": rank,
+					"suit": suit,
+					"colour": colour,
+					"option": option,
+					"option_suit": option_suit,
+					"status": index + 1,
+				}
+				
+				cardsJson.push(card);
+			
             });
-            return result + ']' + "\r\n";
-        }
-
-        plugin.convertArray = function(arr) {
-            return convertArray(arr);
-        }
-
-        var convertArray = function (arr) {
-            var result = [];
-            $.each(arr, function( k, v ) {
-                var params = v.split('-');
-                result[k] = [params[1], suit[params[0]]];
-            });
-            return result;
-        }
-
-
+			
+            return cardsJson;
+		}
 
         // public methods
         // these methods can be called like:

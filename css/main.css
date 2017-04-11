@@ -1,31 +1,55 @@
-.cards .card {
-            cursor: pointer;
-        }
+.cards .card 
+{
+	cursor: pointer;
+}
 
-        ul {
-            margin: 0;
-            padding: 0;
-        }
+ul {
+	margin: 0;
+	padding: 0;
+}
 
-        ul li {
-            list-style: none;
-        }
+ul li {
+	list-style: none;
+	position: relative !important;
+}
 
-        ul#after-table {
-            min-height: 500px;
-        }
+ul#after-table {
+	min-height: 500px;
+}
 
-        ul#after-table li image {
-            float: none !important;
-        }
+ul#after-table li image {
+	float: none !important;
+}
 
-        ul#after-table li {
-            float: left !important;
-            margin: 0 10px 10px 0;
-        }
+ul#after-table li {
+	float: left !important;
+	margin: 0 10px 10px 0;
+}
 
-        ul#div1 li, ul#div2 li {
-            float: left !important;
-            margin: 0 10px 10px 0;
-        }
+ul#div1 li, ul#div2 li {
+	float: left !important;
+	margin: 0 10px 10px 0;
+}
 
+
+.drop-colour {
+	position: absolute;
+	margin-left: -44px;
+	width: 35px;
+}
+.drop-option {
+	position: absolute;
+	margin-left: -44px;
+	margin-top: 20px;
+	width: 35px;
+}
+.drop-option_suit {
+	position: absolute;
+	margin-left: -44px;
+	margin-top: 40px;
+}
+
+
+
+
+		

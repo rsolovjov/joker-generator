@@ -15,7 +15,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" ></script>
-
+	
+	<script src="js/generator.js" ></script>
 </head>
 <body>
 <div class="container" style="margin-top: 20px;">
@@ -23,12 +24,7 @@
         <div class="col-md-2">
             <form id="main" action="">
                 <div class="form-group">
-                    <input type="text" name="firstplayer" class="form-control" placeholder="firstplayer">
-                </div>
-                <div class="form-group">
-                    <input type="text" name="position" class="form-control" placeholder="position">
-                </div>
-                <div class="form-group">
+					<a>Масть козыря</a>
                     <select name="trump" class="form-control" placeholder="trump">
                         <option value="D">♦</option>
                         <option value="H">♥</option>
@@ -37,54 +33,64 @@
                         </select>
                 </div>
                 <div class="form-group">
-                    <input type="text" name="phase" class="form-control" placeholder="phase">
+					<a>Победитель</a>
+                    <input type="text" id="inputWon" name="won" class="form-control" placeholder="won" value="1">
                 </div>
-                <div class="form-group">
-                    <input type="text" name="order" class="form-control" placeholder="order">
-                </div>
-                <div class="form-group">
-                    <input type="text" name="won" class="form-control" placeholder="won">
-                </div>
-                <div class="form-group">
-                    <input type="text" name="total_order" class="form-control" placeholder="total_order">
-                </div>
-
-                <div class="form-group">
-                    <label><input id="auto" type="checkbox" name="auto" value="1"> Авто</label>
-                </div>
-
-                <button type="submit" class="btn btn-default">Submit</button>
-
+				
+				<a id="reset_all" class="btn btn-default">Сбросить все</a>
+				<br></br>
+				<a id="reset_deck" class="btn btn-default">Сбросить колоду</a>
+               
+				
             </form>
         </div>
         <div class="col-md-6">
             <div id="table" style="padding: 10px;border: 1px solid #ccc;">
-                <div id="onTable" class="table clearfix"></div>
-                <div id="myCards" class="cards clearfix"></div>
+                <div id="onTable" class="table clearfix"><a>Карты на столе</a></div>
+                <div id="myCards" class="cards clearfix"><a>Карты в руке</a></div>
+				<br></br>
+				<div id="validCards" class="cards clearfix"><a>Валидные карты</a></div>
             </div>
 
             <div style="padding: 10px;border: 1px solid #ccc;margin: 20px 0;">
+				<a>Колода</a>
                 <ul id="after-table">
                 </ul>
                 <div class="clearfix"></div>
             </div>
 
-            <a id="accept" class="btn btn-default">ОК!</a>
         </div>
         <div class="col-md-4">
             <form>
                 <div class="form-group">
-                    <textarea id="results" class="form-control" style="min-height: 343px;"></textarea>
+                    <textarea id="results" class="form-control" style="min-height: 343px;">				
+Для валидации карт нужны:
+Карты на столе
+Карты в руке
+Масть козыря
+В ответе: Валидные карты
+
+Для определения победителя нужны:
+Карты на столе
+Масть козыря
+В ответе: Победитель (номер карты на столе которая победила)
+					</textarea>
                 </div>
                 <div class="form-group">
-                    <input class="form-control" id="inputFileNameToSaveAs" placeholder="Имя файла" />
+                    <input class="form-control" id="inputFileNameToSaveAs" placeholder="Имя файла" value="output"/>
                 </div>
-                <button onclick="saveTextAsFile()" class="btn btn-default"><i class="glyphicon glyphicon-floppy-disk"></i> Save</button>
+                
+				<a id="preview_for_client_validation" class="btn btn-default">Превью валидации для клиента</a>
+				<a id="preview_for_client_won" class="btn btn-default">Превью победителя для клиента</a>
+				<br></br>
+				<a id="save_for_client_validation" class="btn btn-default">Сохранить валидацию для клиента</a>
+				<a id="save_for_client_won" class="btn btn-default">Сохранить победителя для клиента</a>
+				
             </form>
         </div>
     </div>
 </div>
-<script src="js/generator.js" ></script>
 <script src="js/main.js" ></script>
+
 </body>
 </html>
