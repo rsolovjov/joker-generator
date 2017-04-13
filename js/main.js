@@ -107,7 +107,8 @@
 			
 			var tmpl = _.template(document.getElementById('server-won-template').innerHTML);
 			var res = tmpl({cards_on_table: cards_on_table, first_player: first_player, trump: trump, winner: winner});
-			$('#results').text( res.replace(/\n+/g,'\n') );
+			//$('#results').text( res.replace(/\n+/g,'\n') );
+			$('#results').text( res );
 		}
 		
 		$('#save_for_server_validation').on('click', function (e) {
@@ -133,7 +134,8 @@
 
 			var tmpl = _.template(document.getElementById('server-validation-template').innerHTML);
 			var res = tmpl({cards_on_table: cards_on_table, position: position, trump: trump, hand: hand, valid_cards: valid_cards});
-			$('#results').text( res.replace(/\n+/g,'\n') );
+			//$('#results').text( res.replace(/\n+/g,'\n') );
+			$('#results').text( res );
 		}
 		
 		// Save
