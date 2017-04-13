@@ -24,7 +24,7 @@
 <body>
 
 <script type="text/template" id="server-won-template">cards=[<%var counter=1;%><%for(var card in cards_on_table){%>
-	<%if(cards_on_table[card].suit_ascii=="J"){%><%if(cards_on_table[card].option>1){%>get_table_card(<%=counter++%>,'<%=cards_on_table[card].rank%>','<%=cards_on_table[card].suit_ascii%>','<%=cards_on_table[card].option %>','<%=cards_on_table[card].option_suit_ascii%>'),<%}else{%>get_table_card(<%=counter++%>,'<%=cards_on_table[card].rank%>','<%=cards_on_table[card].suit_ascii%>','<%= cards_on_table[card].option%>'),<%}%><%}else{%>get_table_card(<%=counter++%>,'<%=cards_on_table[card].rank%>','<%=cards_on_table[card].suit_ascii%>'),<%}%><%}%>
+	<%if(cards_on_table[card].suit_ascii=="J"){%><%if(cards_on_table[card].option>1){%>get_table_card(<%=counter++%>,'<%=cards_on_table[card].rank%>','<%=cards_on_table[card].suit_ascii%>',<%=cards_on_table[card].option %>,'<%=cards_on_table[card].option_suit_ascii%>'),<%}else{%><%if(cards_on_table[card].option==1){%>get_table_card(<%=counter++%>,'<%=cards_on_table[card].rank%>','<%=cards_on_table[card].suit_ascii%>',<%=cards_on_table[card].option %>),<%}else{%>get_table_card(<%=counter++%>,'<%=cards_on_table[card].rank%>','<%=cards_on_table[card].suit_ascii%>'),<%}%><%}%><%}else{%>get_table_card(<%=counter++%>,'<%=cards_on_table[card].rank%>','<%=cards_on_table[card].suit_ascii%>'),<%}%><%}%>
 ]
 first_player = <%=first_player%>
 trump = '<%=trump%>'
@@ -38,13 +38,13 @@ phase = 9
 order = 0
 won = 0
 total_order = 3
-table = Array.new<%var counter=1;%> <%for(var card in cards_on_table) {%>
-	<%if (cards_on_table[card].suit_ascii == "J"){%><%if (cards_on_table[card].option > 1) {%>table.push(get_table_card(<%=counter++%>, '<%= cards_on_table[card].rank %>', '<%= cards_on_table[card].suit_ascii %>', '<%= cards_on_table[card].option %>', '<%= cards_on_table[card].option_suit_ascii %>'))<%} else {%>table.push(get_table_card(<%=counter++%>, '<%= cards_on_table[card].rank %>', '<%= cards_on_table[card].suit_ascii %>', '<%= cards_on_table[card].option %>'))<% } %><% } else { %> table.push(get_table_card(<%=counter++%>, '<%= cards_on_table[card].rank %>', '<%= cards_on_table[card].suit_ascii %>')),<% } %><% } %>
+table = Array.new<%var counter=1;%>
+<%for(var card in cards_on_table) {%><%if (cards_on_table[card].suit_ascii == "J"){%><%if (cards_on_table[card].option > 1) {%>table.push(get_table_card(<%=counter++%>, '<%= cards_on_table[card].rank %>', '<%= cards_on_table[card].suit_ascii %>', <%= cards_on_table[card].option %>, '<%= cards_on_table[card].option_suit_ascii %>'))<%} else {%><%if(cards_on_table[card].option==1){%>table.push(get_table_card(<%=counter++%>,'<%=cards_on_table[card].rank%>','<%=cards_on_table[card].suit_ascii%>',<%=cards_on_table[card].option %>)<%}else{%>table.push(get_table_card(<%=counter++%>,'<%=cards_on_table[card].rank%>','<%=cards_on_table[card].suit_ascii%>')<%}%>table.push(get_table_card(<%=counter++%>, '<%= cards_on_table[card].rank %>', '<%= cards_on_table[card].suit_ascii %>', <%= cards_on_table[card].option %>))<% } %><% } else { %> table.push(get_table_card(<%=counter++%>, '<%= cards_on_table[card].rank %>', '<%= cards_on_table[card].suit_ascii %>')),<% } %><% } %>
 cards = Array.new<%for(var card in hand) {%>
-	cards.push(get_card(position, '<%= hand[card].rank %>', '<%= hand[card].suit_ascii %>'))<% } %>
+cards.push(get_card(position, '<%= hand[card].rank %>', '<%= hand[card].suit_ascii %>'))<% } %>
 at = get_available_trick(position, cards, table, firstplayer, trump)
 expect(at.count).to eq(<%= valid_cards.length %>)<%for(var card in valid_cards) {%>
-	expect(at).to include({:status => position, :rank => '<%= valid_cards[card].rank %>', :suit => code('<%= valid_cards[card].suit_ascii %>')})<% } %>
+expect(at).to include({:status => position, :rank => '<%= valid_cards[card].rank %>', :suit => code('<%= valid_cards[card].suit_ascii %>')})<% } %>
 trick = sim_trick(position, cards, table, trump, phase, order, total_order, firstplayer, won)
 expect(trick[:rank]).to be
 expect(trick[:suit]).to eq(code('<%= valid_cards[0].suit_ascii %>'))
