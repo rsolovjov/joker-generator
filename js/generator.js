@@ -113,100 +113,28 @@
 
 			// let the trash be droppable, accepting the gallery items
 			$('#onTable, #myCards, #validCards').droppable({
-				accept: "#after-table > li",
-				activeClass: "ui-state-highlight",
+				//accept: "#after-table > li",
+				//activeClass: "ui-state-highlight",
 				drop: function( event, ui ) {
-					deleteImage( ui.draggable, $(this) );
+					dropCard( ui, $(this) );
 				}
 			});
 
-			// let the gallery be droppable as well, accepting items from the trash
-			$gallery.droppable({
-				accept: "#table li",
-				activeClass: "custom-state-active",
-				drop: function( event, ui ) {
-					recycleImage( ui.draggable );
-				}
-			});
-
-			// image deletion function
-			var recycle_icon = "";
-			function deleteImage( $item, $el ) {
-				console.log('deleteImage');
-				$item.fadeOut(function() {
-					var $list = $( "ul", $el ).length ?
+			function dropCard( $item, $el ) {
+				
+				var $list = $( "ul", $el ).length ?
 						$( "ul", $el ) :
 						$( "<ul class='gallery ui-helper-reset'/>" ).appendTo( $el );
-
-					console.log('item.fadeOut list: ' + $list.length);
-						
-					$item.draggable( "destroy" );
-						
-					$item.find( "a.ui-icon-trash" ).remove();
-					$item.append( recycle_icon ).appendTo( $list ).fadeIn(function() {
-						$item
+				
+				var cardClone = $($item.draggable).clone();
+				
+				cardClone.appendTo( $list ).fadeIn(function() {
+						cardClone
 							.find( "img" )
 							.animate({ height: "100px" });
-					});
 				});
 			}
 
-			// image recycle function
-			var trash_icon = "";
-			function recycleImage( $item ) {
-				$item.fadeOut(function() {
-					$item
-						.find( "a.ui-icon-refresh" )
-						.remove()
-						.end()
-						.append( trash_icon )
-						.find( "img" )
-						.css( "height", "70px" )
-						.end()
-						.appendTo( $gallery )
-						.fadeIn();
-				});
-			}
-
-			// image preview function, demonstrating the ui.dialog used as a modal window
-			function viewLargerImage( $link ) {
-				var src = $link.attr( "href" ),
-					title = $link.siblings( "img" ).attr( "alt" ),
-					$modal = $( "img[src$='" + src + "']" );
-
-				if ( $modal.length ) {
-					$modal.dialog( "open" );
-				} else {
-					var img = $( "<img alt='" + title + "' width='384' height='288' style='display: none; padding: 8px;' />" )
-						.attr( "src", src ).appendTo( "body" );
-					setTimeout(function() {
-						img.dialog({
-							title: title,
-							width: 400,
-							modal: true
-						});
-					}, 1 );
-				}
-			}
-
-			// resolve the icons behavior with event delegation
-			$( "ul.gallery > li" ).click(function( event ) {
-				
-				console.log('click ul.gallery > li ?????');
-				
-				var $item = $( this ),
-					$target = $( event.target );
-
-				if ( $target.is( "a.ui-icon-trash" ) ) {
-					deleteImage( $item );
-				} else if ( $target.is( "a.ui-icon-zoomin" ) ) {
-					viewLargerImage( $target );
-				} else if ( $target.is( "a.ui-icon-refresh" ) ) {
-					recycleImage( $item );
-				}
-
-				return false;
-			});
         }
 
         var printCards = function(el, arr, opts) {
@@ -234,6 +162,8 @@
 				html_string += '<img data-p0="' + params[0] + '" data-p1="' + params[1] + '" data-result="[\'' + params[1] + '\',\'' + suit[params[0]] + '\']" class="card" '+draggable+' src="images/cards/';
 				html_string += params[0] + params[1] + '.svg" ' + 'style="float:left;max-width: 100%;height: ' + card_height + 'px;border:1px solid #ccc;margin: 0 10px 10px 0px;">';				
 				
+				html_string += '<label class="drop-option_valid_checkbox"><input type="checkbox" class="is_valid"> </label>';
+
 				if (params[0] == 'J') 
 				{
 					html_string += '<select name="suit" placeholder="suit" class="drop-option_suit"> <option value="0">0</option> <option value="D">♦</option> <option value="H">♥</option><option value="C">♣</option><option value="S">♠</option></select>';
@@ -270,7 +200,7 @@
 			return parseCards($el);			
         }
 		
-		var parseCards = function ($el) {
+		var parseCards = function ($el, check, valid) {
 			
 			var cardsJson = [];
 			
@@ -285,6 +215,9 @@
 				var option_suit = 0;
 				var option_suit_ascii = 0;
 				var colour = 0;
+
+				var elementIsValid = $this.find('.is_valid');
+				var isValid = elementIsValid.prop('checked');
 				
 				if (suit == 'J')
 				{
@@ -297,10 +230,11 @@
 					option_suit_ascii = suitToASCII(option_suit);
 					
 					var elementColour = $this.find('.drop-colour');
-					colour = elementColour.val();					
+					colour = elementColour.val();	
 				}
-			
+
 				var card = {
+					//"is_valid": isValid,
 					"rank": rank,
 					"suit": suit,
 					"suit_ascii": suit_ascii,
@@ -311,8 +245,13 @@
 					"status": index + 1,
 				}
 				
-				cardsJson.push(card);
-			
+				if (check) {
+					if (valid == isValid)
+						cardsJson.push(card);
+				} else {
+					cardsJson.push(card);
+				}
+
             });
 			
             return cardsJson;

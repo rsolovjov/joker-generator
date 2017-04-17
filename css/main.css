@@ -31,23 +31,44 @@ ul#div1 li, ul#div2 li {
 	margin: 0 10px 10px 0;
 }
 
+.col-md-2-my {
+	width: 20%;
+}
+
+.col-md-6-my {
+	width: 60%;
+}
+
+.col-md-4-my {
+	width: 20%;
+}
+
+.drop-option_valid_checkbox {
+	position: absolute;
+	margin-left: -23px;
+	margin-top: -5px;
+}
 
 .drop-colour {
 	position: absolute;
 	margin-left: -44px;
+	margin-top: 10px;
 	width: 35px;
 }
 .drop-option {
 	position: absolute;
 	margin-left: -44px;
-	margin-top: 20px;
+	margin-top: 30px;
 	width: 35px;
 }
 .drop-option_suit {
 	position: absolute;
 	margin-left: -44px;
-	margin-top: 40px;
+	margin-top: 50px;
 }
+
+
+
 
 
 

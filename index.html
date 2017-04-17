@@ -5,12 +5,13 @@
     <title>Joker Test Playground</title>
 
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" /> -->
 
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap-theme.min.css" />
 
     <link rel="stylesheet" href="css/main.css" />
+	<link rel="stylesheet" href="css/bootstrap.css" />
 
 	<!-- библиотека LoDash -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.js"></script>
@@ -71,18 +72,21 @@ expect(trick[:rank]).to eq('<%= valid_cards[0].rank %>')
                 </div>
 				
 				<a id="reset_all" class="btn btn-default">Сбросить все</a>
+				<!--
 				<br></br>
 				<a id="reset_deck" class="btn btn-default">Сбросить колоду</a>
-               
+				-->
 				
             </form>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-7">
             <div id="table" style="padding: 10px;border: 1px solid #ccc;">
                 <div id="onTable" class="table clearfix"><a>Карты на столе</a></div>
                 <div id="myCards" class="cards clearfix"><a>Карты в руке</a></div>
+				<!--
 				<br></br>
 				<div id="validCards" class="cards clearfix"><a>Валидные карты</a></div>
+				-->
             </div>
 
             <div style="padding: 10px;border: 1px solid #ccc;margin: 20px 0;">
@@ -93,7 +97,7 @@ expect(trick[:rank]).to eq('<%= valid_cards[0].rank %>')
             </div>
 
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <form>
                 <div class="form-group">
                     <textarea id="results" class="form-control" style="min-height: 343px;">Для валидации карт нужны:
