@@ -196,12 +196,12 @@
 			return suit;
 		}
 		
-		plugin.parseCards = function($el) {
-			return parseCards($el);			
+		plugin.parseCards = function($el, checkValid) {
+			return parseCards($el, checkValid);			
         }
 		
-		var parseCards = function ($el, check, valid) {
-			
+		var parseCards = function ($el, checkValid) {
+
 			var cardsJson = [];
 			
 			$el.each(function (index) {
@@ -234,7 +234,7 @@
 				}
 
 				var card = {
-					//"is_valid": isValid,
+					"is_valid": isValid,
 					"rank": rank,
 					"suit": suit,
 					"suit_ascii": suit_ascii,
@@ -244,14 +244,14 @@
 					"option_suit_ascii": option_suit_ascii,
 					"status": index + 1,
 				}
-				
-				if (check) {
-					if (valid == isValid)
+					
+				if (checkValid) {
+					if (isValid == true)
 						cardsJson.push(card);
 				} else {
 					cardsJson.push(card);
 				}
-
+				
             });
 			
             return cardsJson;

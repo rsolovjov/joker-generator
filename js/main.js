@@ -44,11 +44,11 @@
 
 			log.trump = $('form#main select').val();
 			
-			log.cards_on_table = $('#table').data('generator').parseCards($('#onTable li'), false, false);
-			log.hand = $('#table').data('generator').parseCards($('#myCards li'), true, false);
+			log.cards_on_table = $('#table').data('generator').parseCards($('#onTable li'), false);
+			log.hand = $('#table').data('generator').parseCards($('#myCards li'), false);
 			
 			log.answer = {};
-			log.answer.valid_cards = $('#table').data('generator').parseCards($('#myCards li'), true, true);
+			log.answer.valid_cards = $('#table').data('generator').parseCards($('#myCards li'), true);
 			
 			$('#results').text(JSON.stringify(log));
 		}
@@ -75,7 +75,7 @@
 
 			log.trump = $('form#main select').val();
 	
-			log.cards_on_table = $('#table').data('generator').parseCards($('#onTable li'), false, false);
+			log.cards_on_table = $('#table').data('generator').parseCards($('#onTable li'), false);
 
 			log.answer = {};
 			log.answer.won = $('#inputWon').val();
@@ -99,7 +99,7 @@
 		
 		preview_for_server_won = function()
 		{
-			var cards_on_table = $('#table').data('generator').parseCards($('#onTable li'), false, false);
+			var cards_on_table = $('#table').data('generator').parseCards($('#onTable li'), false);
 			var first_player = 1;
 			var winner = $('#inputWon').val();
 			var trump = $('form#main select').val();
@@ -124,9 +124,9 @@
 		
 		preview_for_server_validation = function()
 		{
-			var cards_on_table = $('#table').data('generator').parseCards($('#onTable li'), false, false);
-			var hand = $('#table').data('generator').parseCards($('#myCards li'), true, false);
-			var valid_cards = $('#table').data('generator').parseCards($('#myCards li'), true, false);
+			var cards_on_table = $('#table').data('generator').parseCards($('#onTable li'), false);
+			var hand = $('#table').data('generator').parseCards($('#myCards li'), false);
+			var valid_cards = $('#table').data('generator').parseCards($('#myCards li'), true);
 			
 			var position = cards_on_table.length + 1;
 			var trump = $('form#main select').val();
