@@ -25,7 +25,7 @@
 <body>
 
 <script type="text/template" id="server-won-template">cards=[<%var counter=1;%><%for(var card in cards_on_table){%>
-	<%if(cards_on_table[card].suit_ascii=="J"){%><%if(cards_on_table[card].option>1){%>get_table_card(<%=counter++%>,'<%=cards_on_table[card].rank%>','<%=cards_on_table[card].suit_ascii%>',<%=cards_on_table[card].option %>,'<%=cards_on_table[card].option_suit_ascii%>'),<%}else{%><%if(cards_on_table[card].option==1){%>get_table_card(<%=counter++%>,'<%=cards_on_table[card].rank%>','<%=cards_on_table[card].suit_ascii%>',<%=cards_on_table[card].option %>),<%}else{%>get_table_card(<%=counter++%>,'<%=cards_on_table[card].rank%>','<%=cards_on_table[card].suit_ascii%>'),<%}%><%}%><%}else{%>get_table_card(<%=counter++%>,'<%=cards_on_table[card].rank%>','<%=cards_on_table[card].suit_ascii%>'),<%}%><%}%>
+  <%if(cards_on_table[card].suit_ascii=="J"){%><%if(cards_on_table[card].option>1){%>get_table_card(<%=counter++%>, '<%=cards_on_table[card].rank%>', '<%=cards_on_table[card].suit_ascii%>', <%=cards_on_table[card].option %>, '<%=cards_on_table[card].option_suit_ascii%>'),<%}else{%><%if(cards_on_table[card].option==1){%>get_table_card(<%=counter++%>, '<%=cards_on_table[card].rank%>', '<%=cards_on_table[card].suit_ascii%>', <%=cards_on_table[card].option %>),<%}else{%>get_table_card(<%=counter++%>, '<%=cards_on_table[card].rank%>', '<%=cards_on_table[card].suit_ascii%>'),<%}%><%}%><%}else{%>get_table_card(<%=counter++%>, '<%=cards_on_table[card].rank%>', '<%=cards_on_table[card].suit_ascii%>'),<%}%><%}%>
 ]
 first_player = <%=first_player%>
 trump = '<%=trump%>'
