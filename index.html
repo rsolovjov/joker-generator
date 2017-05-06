@@ -11,16 +11,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap-theme.min.css" />
 
     <link rel="stylesheet" href="css/main.css" />
-	<link rel="stylesheet" href="css/bootstrap.css" />
+  <link rel="stylesheet" href="css/bootstrap.css" />
 
-	<!-- библиотека LoDash -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.js"></script>
+  <!-- библиотека LoDash -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.js"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" ></script>
-	
-	<script src="js/generator.js" ></script>
+
+  <script src="js/generator.js" ></script>
 </head>
 <body>
 
@@ -39,13 +39,20 @@ phase = 9
 order = 0
 won = 0
 total_order = 3
-table = Array.new<%var counter=1;%>
-<%for(var card in cards_on_table) {%><%if (cards_on_table[card].suit_ascii == "J"){%><%if (cards_on_table[card].option > 1) {%>table.push(get_table_card(<%=counter++%>, '<%= cards_on_table[card].rank %>', '<%= cards_on_table[card].suit_ascii %>', <%= cards_on_table[card].option %>, '<%= cards_on_table[card].option_suit_ascii %>'))<%} else {%><%if(cards_on_table[card].option==1){%>table.push(get_table_card(<%=counter++%>,'<%=cards_on_table[card].rank%>','<%=cards_on_table[card].suit_ascii%>',<%=cards_on_table[card].option %>)<%}else{%>table.push(get_table_card(<%=counter++%>,'<%=cards_on_table[card].rank%>','<%=cards_on_table[card].suit_ascii%>')<%}%>table.push(get_table_card(<%=counter++%>, '<%= cards_on_table[card].rank %>', '<%= cards_on_table[card].suit_ascii %>', <%= cards_on_table[card].option %>))<% } %><% } else { %> table.push(get_table_card(<%=counter++%>, '<%= cards_on_table[card].rank %>', '<%= cards_on_table[card].suit_ascii %>')),<% } %><% } %>
-cards = Array.new<%for(var card in hand) {%>
-cards.push(get_card(position, '<%= hand[card].rank %>', '<%= hand[card].suit_ascii %>'))<% } %>
+
+table = [
+<%var counter=1;%><%for(var card in cards_on_table) {%><%if (cards_on_table[card].suit_ascii == "J"){%><%if (cards_on_table[card].option > 1) {%>  get_table_card(<%=counter++%>, '<%= cards_on_table[card].rank %>', '<%= cards_on_table[card].suit_ascii %>', <%= cards_on_table[card].option %>, '<%= cards_on_table[card].option_suit_ascii %>'),
+<%} else {%><%if(cards_on_table[card].option==1){%>  get_table_card(<%=counter++%>,'<%=cards_on_table[card].rank%>','<%=cards_on_table[card].suit_ascii%>',<%=cards_on_table[card].option %>),
+<%} else {%>  get_table_card(<%=counter++%>, '<%=cards_on_table[card].rank%>', '<%=cards_on_table[card].suit_ascii%>'),<% } %><% } %>
+<%} else {%>  get_table_card(<%=counter++%>, '<%= cards_on_table[card].rank %>', '<%= cards_on_table[card].suit_ascii %>'),<% } %><% } %>
+]
+cards = [<%for(var card in hand) {%>
+  get_card(position, '<%= hand[card].rank %>', '<%= hand[card].suit_ascii %>'),<% } %>
+]
+
 at = get_available_trick(position, cards, table, firstplayer, trump)
 expect(at.count).to eq(<%= valid_cards.length %>)<%for(var card in valid_cards) {%>
-expect(at).to include({:status => position, :rank => '<%= valid_cards[card].rank %>', :suit => code('<%= valid_cards[card].suit_ascii %>')})<% } %>
+expect(at).to include({ status: position, rank: '<%= valid_cards[card].rank %>', suit: code('<%= valid_cards[card].suit_ascii %>') })<% } %>
 trick = sim_trick(position, cards, table, trump, phase, order, total_order, firstplayer, won)
 expect(trick[:rank]).to be
 expect(trick[:suit]).to eq(code('<%= valid_cards[0].suit_ascii %>'))
@@ -57,40 +64,40 @@ expect(trick[:rank]).to eq('<%= valid_cards[0].rank %>')
         <div class="col-md-2">
             <form id="main" action="">
                 <div class="form-group">
-					<a>Масть козыря</a>
+          <a>Масть козыря</a>
                     <select name="trump" class="form-control" placeholder="trump">
                         <option value="D">♦</option>
                         <option value="H">♥</option>
                         <option value="C">♣</option>
                         <option value="S">♠</option>
-						<option value="J">J</option>
+            <option value="J">J</option>
                         </select>
                 </div>
                 <div class="form-group">
-					<a>Победитель</a>
+          <a>Победитель</a>
                     <input type="text" id="inputWon" name="won" class="form-control" placeholder="won" value="1">
                 </div>
-				
-				<a id="reset_all" class="btn btn-default">Сбросить все</a>
-				<!--
-				<br></br>
-				<a id="reset_deck" class="btn btn-default">Сбросить колоду</a>
-				-->
-				
+
+        <a id="reset_all" class="btn btn-default">Сбросить все</a>
+        <!--
+        <br></br>
+        <a id="reset_deck" class="btn btn-default">Сбросить колоду</a>
+        -->
+
             </form>
         </div>
         <div class="col-md-7">
             <div id="table" style="padding: 10px;border: 1px solid #ccc;">
                 <div id="onTable" class="table clearfix"><a>Карты на столе</a></div>
                 <div id="myCards" class="cards clearfix"><a>Карты в руке</a></div>
-				<!--
-				<br></br>
-				<div id="validCards" class="cards clearfix"><a>Валидные карты</a></div>
-				-->
+        <!--
+        <br></br>
+        <div id="validCards" class="cards clearfix"><a>Валидные карты</a></div>
+        -->
             </div>
 
             <div style="padding: 10px;border: 1px solid #ccc;margin: 20px 0;">
-				<a>Колода</a>
+        <a>Колода</a>
                 <ul id="after-table">
                 </ul>
                 <div class="clearfix"></div>
@@ -110,23 +117,23 @@ expect(trick[:rank]).to eq('<%= valid_cards[0].rank %>')
 Карты на столе
 Масть козыря
 В ответе: Победитель (номер карты на столе которая победила)
-					</textarea>
+          </textarea>
                 </div>
                 <div class="form-group">
                     <input class="form-control" id="inputFileNameToSaveAs" placeholder="Имя файла" value="output"/>
                 </div>
-                
-				<a id="preview_for_client_validation" class="btn btn-default">Превью валидации для клиента</a>
-				<a id="preview_for_client_won" class="btn btn-default">Превью победителя для клиента</a>
-				<br></br>
-				<a id="save_for_client_validation" class="btn btn-default">Сохранить валидацию для клиента</a>
-				<a id="save_for_client_won" class="btn btn-default">Сохранить победителя для клиента</a>
-				<br></br>
-				<a id="preview_for_server_validation" class="btn btn-default">Превью валидации для сервера</a>
-				<a id="preview_for_server_won" class="btn btn-default">Превью победителя для сервера</a>
-				<br></br>
-				<a id="save_for_server_validation" class="btn btn-default">Сохранить валидацию для сервера</a>
-				<a id="save_for_server_won" class="btn btn-default">Сохранить победителя для сервера</a>
+
+        <a id="preview_for_client_validation" class="btn btn-default">Превью валидации для клиента</a>
+        <a id="preview_for_client_won" class="btn btn-default">Превью победителя для клиента</a>
+        <br></br>
+        <a id="save_for_client_validation" class="btn btn-default">Сохранить валидацию для клиента</a>
+        <a id="save_for_client_won" class="btn btn-default">Сохранить победителя для клиента</a>
+        <br></br>
+        <a id="preview_for_server_validation" class="btn btn-default">Превью валидации для сервера</a>
+        <a id="preview_for_server_won" class="btn btn-default">Превью победителя для сервера</a>
+        <br></br>
+        <a id="save_for_server_validation" class="btn btn-default">Сохранить валидацию для сервера</a>
+        <a id="save_for_server_won" class="btn btn-default">Сохранить победителя для сервера</a>
             </form>
         </div>
     </div>
