@@ -50,13 +50,10 @@ cards = [<%for(var card in hand) {%>
   get_card(position, '<%= hand[card].rank %>', '<%= hand[card].suit_ascii %>'),<% } %>
 ]
 
-at = get_available_trick(position, cards, table, firstplayer, trump)
-expect(at.count).to eq(<%= valid_cards.length %>)<%for(var card in valid_cards) {%>
-expect(at).to include({ status: position, rank: '<%= valid_cards[card].rank %>', suit: code('<%= valid_cards[card].suit_ascii %>') })<% } %>
-trick = sim_trick(position, cards, table, trump, phase, order, total_order, firstplayer, won)
-expect(trick[:rank]).to be
-expect(trick[:suit]).to eq(code('<%= valid_cards[0].suit_ascii %>'))
-expect(trick[:rank]).to eq('<%= valid_cards[0].rank %>')
+valid = [<%for(var card in valid_cards) {%>
+  get_card(position, '<%= valid_cards[card].rank %>', '<%= valid_cards[card].suit_ascii %>'),<% } %>
+]
+include_examples 'validate_trick', position, cards, table, firstplayer, trump, valid
 </script>
 
 <div class="container" style="margin-top: 20px;">
